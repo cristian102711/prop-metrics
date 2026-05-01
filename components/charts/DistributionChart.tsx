@@ -32,7 +32,7 @@ export function DistributionChart() {
             ))}
           </Pie>
           <Tooltip
-            formatter={(v: number) => [`${v}%`, 'Participación']}
+            formatter={(v: number | string | (number | string)[]) => [`${Number(v)}%`, 'Participación']}
             contentStyle={{
               background: 'oklch(0.14 0.015 240)',
               border: '1px solid oklch(1 0 0 / 10%)',

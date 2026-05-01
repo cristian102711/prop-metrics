@@ -185,7 +185,7 @@ export default function ProjectsPage() {
           { label: 'Blockchain', value: 'Algorand', icon: Clock },
         ].map((s) => (
           <div key={s.label} className="p-3 rounded-xl border border-border bg-card flex items-center gap-3">
-            <s.icon className="w-4 h-4 text-primary flex-shrink-0" />
+            <s.icon className="w-4 h-4 text-primary shrink-0" />
             <div>
               <div className="text-xs text-muted-foreground">{s.label}</div>
               <div className="text-sm font-semibold text-foreground">{s.value}</div>
@@ -224,7 +224,7 @@ export default function ProjectsPage() {
               className="group rounded-xl border border-border bg-card overflow-hidden hover:border-primary/40 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5"
             >
               {/* Card header con gradiente */}
-              <div className={`h-24 bg-gradient-to-br ${project.gradient} relative flex items-end p-4`}>
+              <div className={`h-24 bg-linear-to-br ${project.gradient} relative flex items-end p-4`}>
                 <div className="absolute top-3 right-3 flex items-center gap-1.5">
                   <span className="text-[10px] bg-black/30 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
                     {project.blockchain}
@@ -308,7 +308,7 @@ export default function ProjectsPage() {
 
       {/* Footer informativo */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground bg-card border border-border rounded-xl p-4">
-        <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+        <ExternalLink className="w-3.5 h-3.5 shrink-0" />
         Las rentabilidades mostradas son estimaciones. Toda inversión conlleva riesgos.
         PropMetrics opera bajo la Ley Fintech chilena (NCG 502 CMF).
       </div>

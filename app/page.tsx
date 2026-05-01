@@ -37,7 +37,7 @@ export default function LandingPage() {
 
         <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
           Analiza tu portfolio <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-emerald-400">
             con precisión institucional
           </span>
         </h1>

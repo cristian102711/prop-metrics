@@ -55,7 +55,7 @@ export function PortfolioChart() {
             width={52}
           />
           <Tooltip
-            formatter={(v: number) => [fmt(v), 'Portfolio']}
+            formatter={(v: number | string | (number | string)[]) => [fmt(Number(v)), 'Portfolio']}
             contentStyle={{
               background: 'oklch(0.14 0.015 240)',
               border: '1px solid oklch(1 0 0 / 10%)',
