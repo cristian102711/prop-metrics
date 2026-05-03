@@ -32,7 +32,7 @@ export default function LandingPage() {
         {/* Badge superior */}
         <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
           <Zap className="w-3.5 h-3.5" />
-          <span>Diseñado para inversores de Reity y plataformas tokenizadas</span>
+          <span>Diseñado para inversores de plataformas tokenizadas</span>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
@@ -142,7 +142,7 @@ export default function LandingPage() {
             </Button>
           </Link>
           <p className="mt-6 text-xs text-muted-foreground">
-            Compatible con proyectos listados en Reity bajo normativa CMF NCG 502.
+            Compatible con proyectos listados bajo normativa CMF NCG 502.
           </p>
         </div>
       </section>
