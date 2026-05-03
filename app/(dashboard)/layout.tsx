@@ -77,8 +77,7 @@ export default function DashboardLayout({
             </button>
             <ThemeToggle />
             <div className="h-6 w-px bg-border mx-1"></div>
-            <UserButton 
-              afterSignOutUrl="/"
+            <UserButton
               appearance={{
                 elements: {
                   userButtonAvatarBox: "w-8 h-8 ring-2 ring-primary/20",

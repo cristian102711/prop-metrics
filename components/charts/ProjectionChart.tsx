@@ -57,10 +57,10 @@ export function ProjectionChart({ monto, rate, plusvalia, plazo }: ProjectionCha
             width={60}
           />
           <Tooltip
-            formatter={(v: number | string | (number | string)[], name: number | string) => [
+            formatter={((v: unknown, name: unknown) => [
               fmt(Number(v)),
               String(name) === 'valor' ? 'Retorno total' : 'Capital inicial',
-            ]}
+            ]) as (v: unknown, name: unknown) => [string, string]}
             contentStyle={{
               background: 'oklch(0.14 0.015 240)',
               border: '1px solid oklch(1 0 0 / 10%)',
