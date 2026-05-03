@@ -150,7 +150,51 @@
     var(--background);
 }
 
-/* ── SCROLLBAR ──────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── CURSOR POINTER GLOBAL ──────────────────────────────── */
+button,
+a,
+[role="button"],
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+[role="checkbox"],
+[role="radio"],
+label[for],
+select,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+summary,
+[tabindex]:not([tabindex="-1"]) {
+  cursor: pointer;
+}
+
+/* ── LOADING BAR ANIMATION ──────────────────────────────── */
+@keyframes loading-bar {
+  0%   { width: 0%; opacity: 1; }
+  60%  { width: 80%; opacity: 1; }
+  90%  { width: 95%; opacity: 0.8; }
+  100% { width: 100%; opacity: 0; }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 1.8s ease-in-out infinite;
+}
+
+/* ── PAGE TRANSITION ─────────────────────────────────────── */
+/* Fade suave al montar páginas */
+main, section, article {
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
