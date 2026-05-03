@@ -29,8 +29,11 @@ export default async function PortfolioPage() {
   const tirTotal = investments.reduce((acc, inv) => acc + (inv.project.tir * inv.amount), 0)
   const tirProyectada = totalInvertido > 0 ? (tirTotal / totalInvertido).toFixed(1) : '0.0'
 
-  // 2. Fetch Dividendos (Simplificado para la demo)
-  const dividends = await prisma.dividend.findMany()
+  // 2. Fetch Dividendos solo de los proyectos donde el usuario tiene inversiones
+  const projectIds = investments.map((inv) => inv.projectId)
+  const dividends = projectIds.length > 0
+    ? await prisma.dividend.findMany({ where: { projectId: { in: projectIds } } })
+    : []
   const dividendosAcumulados = dividends.reduce((acc, div) => acc + div.amount, 0)
 
   // 3. Fetch Notificaciones
