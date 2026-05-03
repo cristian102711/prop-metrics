@@ -10,22 +10,17 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
-const data = [
-  { mes: 'Nov', valor: 800000 },
-  { mes: 'Dic', valor: 950000 },
-  { mes: 'Ene', valor: 1100000 },
-  { mes: 'Feb', valor: 1350000 },
-  { mes: 'Mar', valor: 1680000 },
-  { mes: 'Abr', valor: 1920000 },
-  { mes: 'May', valor: 2450000 },
-]
+export interface PortfolioDataPoint {
+  mes: string
+  valor: number
+}
 
 const fmt = (v: number) =>
   v >= 1000000
     ? `$${(v / 1000000).toFixed(1)}M`
     : `$${(v / 1000).toFixed(0)}K`
 
-export function PortfolioChart() {
+export function PortfolioChart({ data }: { data: PortfolioDataPoint[] }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5">
       <div className="mb-4">

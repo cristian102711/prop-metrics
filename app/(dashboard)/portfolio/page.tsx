@@ -1,58 +1,133 @@
+import { prisma } from '@/lib/prisma'
 import { PortfolioChart } from '@/components/charts/PortfolioChart'
 import { DividendsChart } from '@/components/charts/DividendsChart'
 import { DistributionChart } from '@/components/charts/DistributionChart'
 import { TrendingUp, Coins, BarChart3, Layers } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { es } from 'date-fns/locale'
 
-const metrics = [
-  {
-    label: 'Total invertido',
-    value: '$2.450.000',
-    sub: '+12% este mes',
-    icon: TrendingUp,
-    positive: true,
-  },
-  {
-    label: 'Dividendos acumulados',
-    value: '$87.340',
-    sub: '+$3.200 hoy',
-    icon: Coins,
-    positive: true,
-  },
-  {
-    label: 'TIR proyectada',
-    value: '11,4%',
-    sub: 'anual estimado',
-    icon: BarChart3,
-    positive: true,
-  },
-  {
-    label: 'Tokens activos',
-    value: '34',
-    sub: 'en 4 proyectos',
-    icon: Layers,
-    positive: null,
-  },
-]
+export default async function PortfolioPage() {
+  // En un entorno real, obtendríamos el usuario autenticado. Aquí usamos el admin por defecto.
+  const admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } })
+  const userId = admin?.id
 
-const notifications = [
-  {
-    color: 'bg-primary',
-    text: 'Dividendo pagado — Edificio Alameda Centro · $1.240 acreditados',
-    time: 'hace 2 horas · automático vía n8n',
-  },
-  {
-    color: 'bg-blue-500',
-    text: 'Proyecto Las Condes IV llegó al 85% de financiamiento',
-    time: 'hace 5 horas · automático vía n8n',
-  },
-  {
-    color: 'bg-amber-500',
-    text: 'Reporte semanal generado y enviado a tu email',
-    time: 'ayer 08:00 · automático vía n8n',
-  },
-]
+  // 1. Fetch Inversiones
+  const investments = await prisma.investment.findMany({
+    where: { userId },
+    include: { project: true },
+  })
 
-export default function PortfolioPage() {
+  const totalInvertido = investments.reduce((acc, inv) => acc + inv.amount, 0)
+  const tokensActivos = investments.reduce((acc, inv) => acc + inv.tokens, 0)
+  const proyectosActivos = new Set(investments.map((i) => i.projectId)).size
+
+  // Cálculo de TIR ponderada
+  const tirTotal = investments.reduce((acc, inv) => acc + (inv.project.tir * inv.amount), 0)
+  const tirProyectada = totalInvertido > 0 ? (tirTotal / totalInvertido).toFixed(1) : '0.0'
+
+  // 2. Fetch Dividendos (Simplificado para la demo)
+  const dividends = await prisma.dividend.findMany()
+  const dividendosAcumulados = dividends.reduce((acc, div) => acc + div.amount, 0)
+
+  // 3. Fetch Notificaciones
+  const notificationsData = await prisma.notification.findMany({
+    orderBy: { sentAt: 'desc' },
+    take: 3,
+  })
+
+  // 4. Generar datos para los gráficos basados en datos reales
+  
+  // a) Distribución por Token
+  const distributionMap = new Map<string, number>()
+  investments.forEach((inv) => {
+    const type = inv.project.type
+    distributionMap.set(type, (distributionMap.get(type) || 0) + inv.amount)
+  })
+  
+  const typeNames: Record<string, string> = {
+    RENTA: 'Token Renta',
+    DESARROLLO: 'Token Desarrollo',
+    SOCIO_PREFERENTE: 'Socio Preferente'
+  }
+  
+  const typeColors: Record<string, string> = {
+    RENTA: 'oklch(0.60 0.20 160)',
+    DESARROLLO: 'oklch(0.55 0.16 200)',
+    SOCIO_PREFERENTE: 'oklch(0.65 0.14 120)'
+  }
+
+  const distributionData = Array.from(distributionMap.entries()).map(([type, amount]) => ({
+    name: typeNames[type] || type,
+    value: totalInvertido > 0 ? Math.round((amount / totalInvertido) * 100) : 0,
+    color: typeColors[type] || 'oklch(0.60 0.20 160)'
+  }))
+
+  // b) Curva de Crecimiento del Portfolio (Simulada para 6 meses terminando en el valor real)
+  const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun']
+  let valorActual = totalInvertido * 0.4 // Empezamos en 40% del portfolio hace 6 meses
+  const portfolioData = meses.map((mes, index) => {
+    if (index === meses.length - 1) {
+      return { mes, valor: totalInvertido }
+    }
+    const growth = (totalInvertido - valorActual) / (meses.length - index)
+    valorActual += growth * (0.8 + Math.random() * 0.4) // Randomize un poco
+    return { mes, valor: Math.round(valorActual) }
+  })
+
+  // c) Curva de Dividendos (Simulada para 6 meses con total igual al real)
+  let dividendosRestantes = dividendosAcumulados
+  const dividendData = meses.map((mes, index) => {
+    if (index === meses.length - 1) {
+      return { mes, dividendos: dividendosRestantes }
+    }
+    const avg = dividendosRestantes / (meses.length - index)
+    const current = Math.round(avg * (0.5 + Math.random()))
+    dividendosRestantes -= current
+    return { mes, dividendos: current }
+  })
+
+  // Format the metrics for the UI
+  const metrics = [
+    {
+      label: 'Total invertido',
+      value: `$${(totalInvertido / 1000).toFixed(0)}K`,
+      sub: '+12% este mes',
+      icon: TrendingUp,
+      positive: true,
+    },
+    {
+      label: 'Dividendos acumulados',
+      value: `$${(dividendosAcumulados / 1000).toFixed(1)}K`,
+      sub: '+$3.2K hoy',
+      icon: Coins,
+      positive: true,
+    },
+    {
+      label: 'TIR proyectada',
+      value: `${tirProyectada}%`,
+      sub: 'anual estimado',
+      icon: BarChart3,
+      positive: true,
+    },
+    {
+      label: 'Tokens activos',
+      value: tokensActivos.toString(),
+      sub: `en ${proyectosActivos} proyectos`,
+      icon: Layers,
+      positive: null,
+    },
+  ]
+
+  // Color mapping based on notification type
+  const getNotifColor = (type: string) => {
+    switch (type) {
+      case 'DIVIDEND_PAID': return 'bg-primary'
+      case 'PROJECT_FUNDED': return 'bg-blue-500'
+      case 'WEEKLY_REPORT': return 'bg-amber-500'
+      default: return 'bg-primary'
+    }
+  }
+
   return (
     <div className="space-y-6">
 
@@ -84,15 +159,15 @@ export default function PortfolioPage() {
       {/* Charts — fila 1 */}
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2">
-          <PortfolioChart />
+          <PortfolioChart data={portfolioData} />
         </div>
-        <DistributionChart />
+        <DistributionChart data={distributionData} />
       </div>
 
       {/* Charts + Notificaciones — fila 2 */}
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2">
-          <DividendsChart />
+          <DividendsChart data={dividendData} />
         </div>
 
         {/* Notificaciones */}
@@ -100,16 +175,18 @@ export default function PortfolioPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-foreground">Notificaciones</h2>
             <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
-              3 nuevas
+              {notificationsData.length} nuevas
             </span>
           </div>
           <div className="space-y-3">
-            {notifications.map((n, i) => (
-              <div key={i} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
-                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${n.color}`} />
+            {notificationsData.map((n) => (
+              <div key={n.id} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
+                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${getNotifColor(n.type)}`} />
                 <div>
-                  <div className="text-xs text-foreground leading-relaxed">{n.text}</div>
-                  <div className="text-[10px] text-muted-foreground mt-0.5">{n.time}</div>
+                  <div className="text-xs text-foreground leading-relaxed">{n.message}</div>
+                  <div className="text-[10px] text-muted-foreground mt-0.5">
+                    {formatDistanceToNow(n.sentAt, { addSuffix: true, locale: es })} · automático vía {n.channel}
+                  </div>
                 </div>
               </div>
             ))}
