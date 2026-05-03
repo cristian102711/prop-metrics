@@ -10,19 +10,14 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
-const data = [
-  { mes: 'Nov', dividendos: 8200 },
-  { mes: 'Dic', dividendos: 11400 },
-  { mes: 'Ene', dividendos: 9800 },
-  { mes: 'Feb', dividendos: 14300 },
-  { mes: 'Mar', dividendos: 12600 },
-  { mes: 'Abr', dividendos: 18900 },
-  { mes: 'May', dividendos: 12040 },
-]
+export interface DividendDataPoint {
+  mes: string
+  dividendos: number
+}
 
 const fmt = (v: number) => `$${v.toLocaleString('es-CL')}`
 
-export function DividendsChart() {
+export function DividendsChart({ data }: { data: DividendDataPoint[] }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5">
       <div className="mb-4">

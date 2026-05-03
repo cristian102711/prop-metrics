@@ -35,6 +35,57 @@ export default async function PortfolioPage() {
     take: 3,
   })
 
+  // 4. Generar datos para los gráficos basados en datos reales
+  
+  // a) Distribución por Token
+  const distributionMap = new Map<string, number>()
+  investments.forEach((inv) => {
+    const type = inv.project.type
+    distributionMap.set(type, (distributionMap.get(type) || 0) + inv.amount)
+  })
+  
+  const typeNames: Record<string, string> = {
+    RENTA: 'Token Renta',
+    DESARROLLO: 'Token Desarrollo',
+    SOCIO_PREFERENTE: 'Socio Preferente'
+  }
+  
+  const typeColors: Record<string, string> = {
+    RENTA: 'oklch(0.60 0.20 160)',
+    DESARROLLO: 'oklch(0.55 0.16 200)',
+    SOCIO_PREFERENTE: 'oklch(0.65 0.14 120)'
+  }
+
+  const distributionData = Array.from(distributionMap.entries()).map(([type, amount]) => ({
+    name: typeNames[type] || type,
+    value: totalInvertido > 0 ? Math.round((amount / totalInvertido) * 100) : 0,
+    color: typeColors[type] || 'oklch(0.60 0.20 160)'
+  }))
+
+  // b) Curva de Crecimiento del Portfolio (Simulada para 6 meses terminando en el valor real)
+  const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun']
+  let valorActual = totalInvertido * 0.4 // Empezamos en 40% del portfolio hace 6 meses
+  const portfolioData = meses.map((mes, index) => {
+    if (index === meses.length - 1) {
+      return { mes, valor: totalInvertido }
+    }
+    const growth = (totalInvertido - valorActual) / (meses.length - index)
+    valorActual += growth * (0.8 + Math.random() * 0.4) // Randomize un poco
+    return { mes, valor: Math.round(valorActual) }
+  })
+
+  // c) Curva de Dividendos (Simulada para 6 meses con total igual al real)
+  let dividendosRestantes = dividendosAcumulados
+  const dividendData = meses.map((mes, index) => {
+    if (index === meses.length - 1) {
+      return { mes, dividendos: dividendosRestantes }
+    }
+    const avg = dividendosRestantes / (meses.length - index)
+    const current = Math.round(avg * (0.5 + Math.random()))
+    dividendosRestantes -= current
+    return { mes, dividendos: current }
+  })
+
   // Format the metrics for the UI
   const metrics = [
     {
@@ -108,15 +159,15 @@ export default async function PortfolioPage() {
       {/* Charts — fila 1 */}
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2">
-          <PortfolioChart />
+          <PortfolioChart data={portfolioData} />
         </div>
-        <DistributionChart />
+        <DistributionChart data={distributionData} />
       </div>
 
       {/* Charts + Notificaciones — fila 2 */}
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-2">
-          <DividendsChart />
+          <DividendsChart data={dividendData} />
         </div>
 
         {/* Notificaciones */}
