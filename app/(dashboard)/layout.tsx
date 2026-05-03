@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { UserButton, OrganizationSwitcher } from '@clerk/nextjs'
+import { UserButton } from '@clerk/nextjs'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import {
   LayoutDashboard,
@@ -67,17 +67,8 @@ export default function DashboardLayout({
         <header className="flex items-center justify-between px-6 py-3 border-b border-border bg-background/60 backdrop-blur-sm sticky top-0 z-10">
           <div className="text-sm text-muted-foreground flex items-center gap-4">
             <span>Plataforma de inversión tokenizada · <span className="text-primary font-medium">Blockchain Algorand</span></span>
-            <div className="h-4 w-px bg-border hidden sm:block"></div>
-            <OrganizationSwitcher 
-              hidePersonal={false}
-              appearance={{
-                elements: {
-                  organizationSwitcherTrigger: "focus:outline-none focus:ring-0 px-2 py-1 rounded-md hover:bg-muted transition-colors",
-                  organizationPreviewTextContainer: "text-foreground",
-                  organizationPreviewMainIdentifier: "text-foreground font-medium",
-                }
-              }}
-            />
+            <div className="h-4 w-px bg-border hidden sm:block" />
+            <span className="text-xs text-muted-foreground font-medium hidden sm:block">PropMetrics Platform</span>
           </div>
           <div className="flex items-center gap-3">
             <button className="relative w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200">
