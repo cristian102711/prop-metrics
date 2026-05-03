@@ -7,7 +7,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/30">
       
       {/* Navbar Premium */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-border bg-background/50 backdrop-blur-md sticky top-0 z-50">
+      <nav className="flex items-center justify-between px-8 py-4 border-b border-border bg-background/50 backdrop-blur-md sticky top-0 z-50 animate-in slide-in-from-top-4 duration-700">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
             <TrendingUp className="w-5 h-5 text-primary-foreground" />
@@ -30,30 +30,30 @@ export default function LandingPage() {
       <section className="relative flex flex-col items-center justify-center text-center px-8 pt-32 pb-24 overflow-hidden mesh-bg min-h-[85vh]">
         
         {/* Badge superior */}
-        <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm animate-in fade-in slide-in-from-top-8 duration-1000">
           <Zap className="w-3.5 h-3.5" />
           <span>Diseñado para inversores de plataformas tokenizadas</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
+        <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight max-w-4xl animate-in fade-in zoom-in-95 duration-1000 delay-150 fill-mode-both">
           Analiza tu portfolio <br className="hidden md:block" />
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-emerald-400">
             con precisión institucional
           </span>
         </h1>
         
-        <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+        <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl animate-in fade-in slide-in-from-right-12 duration-1000 delay-300 fill-mode-both">
           PropMetrics centraliza el análisis de tus tokens inmobiliarios, simula rentabilidades en tiempo real y te asiste con IA financiera.
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
-          <Link href="/sign-up">
+        <div className="flex flex-col sm:flex-row items-center gap-4 animate-in fade-in slide-in-from-left-12 duration-1000 delay-500 fill-mode-both">
+          <Link href="/portfolio">
             <Button size="lg" className="h-12 px-8 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl shadow-primary/20 group">
               Acceder al Dashboard
               <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
-          <Link href="/portfolio">
+          <Link href="/simulator">
             <Button variant="outline" size="lg" className="h-12 px-8 text-base font-medium border-border hover:bg-muted/50 bg-background/50 backdrop-blur-sm">
               Ver Demo en Vivo
             </Button>
@@ -61,7 +61,7 @@ export default function LandingPage() {
         </div>
 
         {/* Floating Stats */}
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl animate-in fade-in duration-1000 delay-500">
+        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700 fill-mode-both">
           {[
             { label: 'Volumen Analizado', value: '$5.4B+' },
             { label: 'Proyectos Indexados', value: '40+' },
