@@ -23,11 +23,12 @@ async function main() {
   })
   console.log(`✓ Tenant created: ${tenant.name}`)
 
-  // 2. Create an Admin User
+  // 2. Create an Admin User (clerkId will be updated on first login)
   const admin = await prisma.user.upsert({
     where: { email: 'admin@propmetrics.com' },
     update: {},
     create: {
+      clerkId: 'seed_admin_placeholder',
       email: 'admin@propmetrics.com',
       name: 'Admin PropMetrics',
       role: Role.ADMIN,

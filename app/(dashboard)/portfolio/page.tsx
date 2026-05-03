@@ -1,4 +1,6 @@
+import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import { getAuthUser } from '@/lib/getAuthUser'
 import { PortfolioChart } from '@/components/charts/PortfolioChart'
 import { DividendsChart } from '@/components/charts/DividendsChart'
 import { DistributionChart } from '@/components/charts/DistributionChart'
@@ -7,9 +9,11 @@ import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export default async function PortfolioPage() {
-  // En un entorno real, obtendríamos el usuario autenticado. Aquí usamos el admin por defecto.
-  const admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } })
-  const userId = admin?.id
+  // Obtenemos el usuario autenticado real desde Clerk → BD
+  const user = await getAuthUser()
+  if (!user) redirect('/sign-in')
+
+  const userId = user.id
 
   // 1. Fetch Inversiones
   const investments = await prisma.investment.findMany({
