@@ -128,6 +128,52 @@ async function main() {
     }
   }
 
+  // 4. Seed Investments, Dividends, and Notifications for Admin User
+  const allProjects = await prisma.project.findMany()
+  if (allProjects.length > 0) {
+    // 4a. Investments
+    const investmentCount = await prisma.investment.count({ where: { userId: admin.id } })
+    if (investmentCount === 0) {
+      console.log('🌱 Seeding investments...')
+      await prisma.investment.createMany({
+        data: [
+          { userId: admin.id, projectId: allProjects[0].id, amount: 1000000, tokens: 10 },
+          { userId: admin.id, projectId: allProjects[1].id, amount: 500000, tokens: 5 },
+          { userId: admin.id, projectId: allProjects[2].id, amount: 950000, tokens: 19 },
+        ]
+      })
+      console.log('✓ Investments seeded')
+    }
+
+    // 4b. Dividends
+    const dividendCount = await prisma.dividend.count({ where: { projectId: allProjects[0].id } })
+    if (dividendCount === 0) {
+      console.log('🌱 Seeding dividends...')
+      await prisma.dividend.createMany({
+        data: [
+          { projectId: allProjects[0].id, amount: 15000 },
+          { projectId: allProjects[0].id, amount: 15500 },
+          { projectId: allProjects[1].id, amount: 8000 },
+        ]
+      })
+      console.log('✓ Dividends seeded')
+    }
+
+    // 4c. Notifications
+    const notificationCount = await prisma.notification.count()
+    if (notificationCount === 0) {
+      console.log('🌱 Seeding notifications...')
+      await prisma.notification.createMany({
+        data: [
+          { type: 'DIVIDEND_PAID', channel: 'n8n', message: `Dividendo pagado — ${allProjects[0].name} · $15.500 acreditados` },
+          { type: 'PROJECT_FUNDED', channel: 'n8n', message: `Proyecto ${allProjects[2].name} llegó al 85% de financiamiento` },
+          { type: 'WEEKLY_REPORT', channel: 'n8n', message: 'Reporte semanal generado y enviado a tu email' },
+        ]
+      })
+      console.log('✓ Notifications seeded')
+    }
+  }
+
   console.log('✅ Seeding finished.')
 }
 
