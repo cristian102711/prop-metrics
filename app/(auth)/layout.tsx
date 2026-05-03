@@ -9,7 +9,7 @@ export default function AuthLayout({
     <div className="flex min-h-screen bg-background text-foreground">
       
       {/* Left Panel: Branding & Value Prop */}
-      <div className="hidden lg:flex flex-col flex-1 bg-card/50 border-r border-border mesh-bg relative overflow-hidden">
+      <div className="hidden lg:flex flex-col flex-1 bg-card/50 border-r border-border mesh-bg relative overflow-hidden animate-in fade-in slide-in-from-left-8 duration-1000">
         {/* Abstract Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/20 rounded-full blur-[100px]" />
@@ -66,7 +66,7 @@ export default function AuthLayout({
       <div className="flex-1 flex flex-col items-center justify-center p-6 lg:p-12 relative bg-background">
         
         {/* Mobile Logo (Visible only on small screens) */}
-        <div className="absolute top-8 left-8 lg:hidden flex items-center gap-2">
+        <div className="absolute top-8 left-8 lg:hidden flex items-center gap-2 animate-in fade-in duration-700">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/30">
             <TrendingUp className="w-4 h-4 text-primary-foreground" />
           </div>
@@ -74,7 +74,7 @@ export default function AuthLayout({
         </div>
 
         {/* Clerk Form Container */}
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md animate-in fade-in zoom-in-[0.98] slide-in-from-bottom-4 duration-700 delay-150 fill-mode-both">
           {children}
         </div>
         
