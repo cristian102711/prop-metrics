@@ -21,6 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider
       localization={esES}
+      afterSignOutUrl="/"
       appearance={{
         baseTheme: dark,
         variables: {

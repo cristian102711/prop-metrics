@@ -41,7 +41,7 @@ export function DividendsChart({ data }: { data: DividendDataPoint[] }) {
             width={42}
           />
           <Tooltip
-            formatter={(v: number | string | (number | string)[]) => [fmt(Number(v)), 'Dividendos']}
+            formatter={((v: unknown) => [fmt(Number(v)), 'Dividendos']) as (v: unknown) => [string, string]}
             contentStyle={{
               background: 'oklch(0.14 0.015 240)',
               border: '1px solid oklch(1 0 0 / 10%)',
