@@ -11,4 +11,7 @@ export default defineConfig({
     // DIRECT_URL: port 5432 sin pgbouncer — requerido por Prisma CLI para migraciones
     url: process.env.DIRECT_URL!,
   },
+  migrations: {
+    seed: 'npx tsx prisma/seed.ts',
+  },
 });

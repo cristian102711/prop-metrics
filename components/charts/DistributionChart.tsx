@@ -2,13 +2,13 @@
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
-const data = [
-  { name: 'Token Renta', value: 55, color: 'oklch(0.60 0.20 160)' },
-  { name: 'Token Desarrollo', value: 30, color: 'oklch(0.55 0.16 200)' },
-  { name: 'Socio Preferente', value: 15, color: 'oklch(0.65 0.14 120)' },
-]
+export interface DistributionDataPoint {
+  name: string
+  value: number
+  color: string
+}
 
-export function DistributionChart() {
+export function DistributionChart({ data }: { data: DistributionDataPoint[] }) {
   return (
     <div className="rounded-xl border border-border bg-card p-5">
       <div className="mb-2">
