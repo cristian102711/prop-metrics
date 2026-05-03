@@ -1,14 +1,13 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { Send, Trash2, Bot } from 'lucide-react'
 
 type Message = {
   role: 'user' | 'assistant'
   content: string
 }
-
-const STORAGE_KEY = 'propmetrics-chat-history'
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
@@ -24,16 +23,19 @@ const suggestions = [
 ]
 
 export default function AssistantPage() {
+  const { user } = useUser()
+  const storageKey = user ? `propmetrics-chat-${user.id}` : 'propmetrics-chat-guest'
+
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Load history from localStorage on mount
+  // Load history from localStorage on mount (per user)
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY)
+      const saved = localStorage.getItem(storageKey)
       if (saved) {
         const parsed = JSON.parse(saved) as Message[]
         if (parsed.length > 0) setMessages(parsed)
@@ -41,14 +43,14 @@ export default function AssistantPage() {
     } catch {
       // Ignore parse errors
     }
-  }, [])
+  }, [storageKey])
 
-  // Persist to localStorage whenever messages change
+  // Persist to localStorage whenever messages change (per user)
   useEffect(() => {
     if (messages.length > 1) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
+      localStorage.setItem(storageKey, JSON.stringify(messages))
     }
-  }, [messages])
+  }, [messages, storageKey])
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -57,9 +59,9 @@ export default function AssistantPage() {
 
   const clearHistory = useCallback(() => {
     setMessages([INITIAL_MESSAGE])
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(storageKey)
     inputRef.current?.focus()
-  }, [])
+  }, [storageKey])
 
   const sendMessage = useCallback(
     async (text?: string) => {
