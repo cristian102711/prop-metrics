@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
@@ -6,10 +7,15 @@ export async function POST(req: NextRequest) {
 
   // Fetch actual data from DB to provide context to the AI
   const projects = await prisma.project.findMany({ where: { active: true } })
-  const admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } })
-  const investments = admin
+  // Obtener el usuario real de Clerk
+  const { userId: clerkId } = await auth()
+  const dbUser = clerkId
+    ? await prisma.user.findUnique({ where: { clerkId } })
+    : null
+
+  const investments = dbUser
     ? await prisma.investment.findMany({
-        where: { userId: admin.id },
+        where: { userId: dbUser.id },
         include: { project: true },
       })
     : []
