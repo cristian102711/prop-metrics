@@ -21,12 +21,12 @@ export default async function PortfolioPage() {
     include: { project: true },
   })
 
-  const totalInvertido = investments.reduce((acc: number, inv) => acc + inv.amount, 0)
-  const tokensActivos = investments.reduce((acc: number, inv) => acc + inv.tokens, 0)
+  const totalInvertido = investments.reduce<number>((acc, inv) => acc + inv.amount, 0)
+  const tokensActivos = investments.reduce<number>((acc, inv) => acc + inv.tokens, 0)
   const proyectosActivos = new Set(investments.map((i) => i.projectId)).size
 
   // Cálculo de TIR ponderada
-  const tirTotal = investments.reduce((acc: number, inv) => acc + (inv.project.tir * inv.amount), 0)
+  const tirTotal = investments.reduce<number>((acc, inv) => acc + (inv.project.tir * inv.amount), 0)
   const tirProyectada = totalInvertido > 0 ? (tirTotal / totalInvertido).toFixed(1) : '0.0'
 
   // 2. Fetch Dividendos solo de los proyectos donde el usuario tiene inversiones
@@ -34,7 +34,7 @@ export default async function PortfolioPage() {
   const dividends = projectIds.length > 0
     ? await prisma.dividend.findMany({ where: { projectId: { in: projectIds } } })
     : []
-  const dividendosAcumulados = dividends.reduce((acc: number, div) => acc + div.amount, 0)
+  const dividendosAcumulados = dividends.reduce<number>((acc, div) => acc + div.amount, 0)
 
   // 3. Fetch Notificaciones
   const notificationsData = await prisma.notification.findMany({
