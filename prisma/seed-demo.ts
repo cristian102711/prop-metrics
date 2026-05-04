@@ -168,27 +168,22 @@ SOLUCIÓN:
   }
 
   // ── 6. Notificaciones del usuario demo ───────────────────────────────────
-  const existingNotifications = await prisma.notification.count({
-    where: { userId: demoUser.id },
-  })
+  const existingNotifications = await prisma.notification.count()
 
   if (existingNotifications === 0) {
     await prisma.notification.createMany({
       data: [
         {
-          userId: demoUser.id,
           type: 'DIVIDEND_PAID',
           channel: 'system',
           message: 'Dividendo acreditado — Edificio Alameda Centro · $19.200 disponibles',
         },
         {
-          userId: demoUser.id,
           type: 'PROJECT_FUNDED',
           channel: 'system',
           message: 'Las Condes IV llegó al 85% de financiamiento · Última oportunidad',
         },
         {
-          userId: demoUser.id,
           type: 'WEEKLY_REPORT',
           channel: 'system',
           message: 'Tu reporte semanal está listo · TIR promedio: 11.9%',
