@@ -22,8 +22,6 @@ export default function RootLayout({
     <ClerkProvider
       localization={esES}
       afterSignOutUrl="/"
-      afterSignInUrl="/portfolio"
-      afterSignUpUrl="/portfolio"
       appearance={{
         baseTheme: dark,
         variables: {
