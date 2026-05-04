@@ -24,7 +24,7 @@ const pool = new Pool({
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
-const DEMO_EMAIL = 'demo@propmetrics.app'
+const DEMO_EMAIL = 'propmetrics.demo@gmail.com'
 
 async function main() {
   console.log(`\n🌱 Iniciando seed del usuario demo: ${DEMO_EMAIL}\n`)
