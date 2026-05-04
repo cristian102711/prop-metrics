@@ -1,8 +1,13 @@
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { TrendingUp, Shield, BarChart3, Bot, ChevronRight, Zap } from 'lucide-react'
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const { userId } = await auth()
+  if (userId) redirect('/portfolio')
+
   return (
     <main className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/30">
       

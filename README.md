@@ -88,7 +88,7 @@ Accede a la aplicación en producción:
 
 Para explorar sin crear cuenta, usa las credenciales de demo:
 ```
-Email:    demo@propmetrics.app
+Email:    propmetrics.demo@gmail.com
 Password: PropMetrics@2026!
 ```
 

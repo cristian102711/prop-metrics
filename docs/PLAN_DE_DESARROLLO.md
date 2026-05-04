@@ -39,7 +39,7 @@
 - [ ] Agregar sección "Demo" con link y credenciales
 
 ### 1.2 Cuenta demo pública
-- [ ] Crear usuario `demo@propmetrics.app` / `Demo1234!` en Clerk
+- [ ] Crear usuario `propmetrics.demo@gmail.com` / `PropMetrics@2026!` en Clerk
 - [ ] Hacer seed de datos realistas para ese usuario en Supabase
   - Mínimo 3 inversiones en proyectos distintos
   - Mínimo 2 dividendos recibidos
